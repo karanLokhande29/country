@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="Export Dashboard", layout="wide")
 st.title("📦 Unified Export Dashboard")
@@ -62,24 +61,6 @@ if uploaded_file:
         st.metric("Total Revenue (USD)", f"${filtered_df['TOTAL USD'].sum():,.2f}")
     with col3:
         st.metric("Avg. Unit Rate", f"${filtered_df['UNIT RATE'].mean():,.2f}")
-
-    st.subheader("📈 Visualizations")
-
-    # --- Country-wise Revenue ---
-    country_rev = filtered_df.groupby("DESTINATION")["TOTAL USD"].sum().sort_values(ascending=False)
-    st.bar_chart(country_rev)
-
-    # --- Monthly Trend ---
-    filtered_df["Month"] = filtered_df["DATE"].dt.to_period("M").astype(str)
-    monthly_trend = filtered_df.groupby("Month")["TOTAL USD"].sum()
-    st.line_chart(monthly_trend)
-
-    # --- Importer Revenue Pie Chart ---
-    top_importers = filtered_df.groupby("IMPORTER")["TOTAL USD"].sum().sort_values(ascending=False).head(10)
-    fig, ax = plt.subplots()
-    ax.pie(top_importers, labels=top_importers.index, autopct="%1.1f%%", startangle=140)
-    ax.set_title("Top 10 Importers by Revenue")
-    st.pyplot(fig)
 
     # --- View and Download ---
     with st.expander("🔍 View Filtered Data"):
